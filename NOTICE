@@ -1,0 +1,54 @@
+AI-Wanyun Project Notice
+
+The root LICENSE is the MIT License and applies only to AI-Wanyun original
+source code. It does not grant rights in third-party software, models,
+checkpoints, face detectors, datasets, generation platforms, provider
+services, or user-supplied content. Those components remain subject to their
+own licenses, terms, permissions, and restrictions.
+
+Project content
+---------------
+
+The original source in backend/, frontend/, and tests/ is covered by the root
+MIT License. The official files
+`characters/su-wanyun/persona.md` and
+`characters/su-wanyun/avatar/suwanyun_idle_speaking_v3_25fps.mp4` are covered
+separately by CC BY 4.0, only to the extent of rights held by project
+contributors. Required attribution: `AI-Wanyun / Su Wanyun Character Pack`.
+See `characters/su-wanyun/LICENSE.md` and `PROVENANCE.md`. This does not grant
+rights in generation platforms or user-supplied Personas, likenesses, media,
+or other assets.
+
+Referenced external projects (not included in this candidate)
+--------------------------------------------------------------
+
+- LiveTalking: https://github.com/lipku/LiveTalking
+  Upstream license evidence: https://raw.githubusercontent.com/lipku/LiveTalking/main/LICENSE
+  This reference is not a bundled copy or license grant. If LiveTalking is ever
+  bundled, include the upstream Apache-2.0 license, preserve required notices,
+  identify modifications, and audit its models, images, dependencies, and
+  runtime layers separately.
+- Wav2Lip: https://github.com/Rudrabha/Wav2Lip
+  Terms evidence: https://raw.githubusercontent.com/Rudrabha/Wav2Lip/master/README.md
+  The open-source code/results/models carry a research/academic/personal and
+  non-commercial boundary in the upstream README. No Wav2Lip code, weights,
+  face-detector model, or dataset is included here.
+
+Python dependencies
+-------------------
+
+The candidate declares Python dependencies but does not vendor their source.
+See DEPENDENCY_LICENSES.md for package-specific license and notice obligations.
+If a future distribution bundles wheels or source, ship the applicable
+licenses, copyright notices, attribution, and any required NOTICE text for
+every exact package and transitive dependency. `USER_INSTALLS_SEPARATELY`
+does not remove those obligations.
+
+Unresolved external rights
+--------------------------
+
+Checkpoint/model/dataset, face detector, GPU/driver, container/runtime,
+provider API terms, and user-content rights remain UNKNOWN until separately
+documented. The supplied Character Pack has its own narrow license and
+provenance record; neither it nor the root MIT License resolves those external
+rights or asserts commercial clearance for the full runtime.

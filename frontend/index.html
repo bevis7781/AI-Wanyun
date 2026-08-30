@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Wanyun · Developer Preview</title>
+  <link rel="stylesheet" href="/static/app.css?v=mvp10scene">
+</head>
+<body data-state="paused">
+  <div class="app">
+    <div class="column caption-column">
+      <div id="status">初始化中…</div>
+      <div id="caption-stack" aria-live="polite"></div>
+      <div class="text-input-slot">
+        <textarea id="text-input" rows="1" placeholder="写点什么…" aria-label="给助手写一句话"></textarea>
+      </div>
+    </div>
+
+    <div class="column button-column">
+      <button id="talk-btn" class="conversation-toggle" aria-label="开始连续对话" aria-pressed="false">
+        <span class="orb-ambient" aria-hidden="true"></span>
+        <span class="orb-float" aria-hidden="true">
+          <span class="spirit-orb-placeholder" aria-hidden="true"></span>
+        </span>
+      </button>
+    </div>
+
+    <div class="column video-column">
+      <div class="video-frame">
+        <div class="video-wrapper">
+          <video id="avatar-video" autoplay playsinline muted></video>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- G7：诊断入口从主界面移除；开发者可直接访问 /diagnostics -->
+  <script src="/static/app.js?v=g3v2" type="module"></script>
+</body>
+</html>

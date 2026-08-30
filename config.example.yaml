@@ -1,0 +1,71 @@
+# Copy this file to config.yaml and adjust non-secret values.
+app:
+  host: "127.0.0.1"
+  port: 7870
+
+persona_path: "characters/su-wanyun/persona.md"
+
+asr:
+  model: "qwen-audio-3.0-asr-flash-streaming"
+  ws_url: "wss://ws-ypa7uyj66zsg1d6y.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+  format: "pcm"
+  sample_rate: 16000
+  max_sentence_silence: 1600
+  semantic_punctuation_enabled: false
+  max_retries: 2
+  connect_timeout: 12
+  retry_cooldown: 10
+  finish_timeout: 5.0
+
+llm:
+  model: "deepseek-chat"
+  base_url: "https://api.deepseek.com/v1"
+  max_context_turns: 20
+  temperature: 0.7
+  max_tokens: 512
+
+tts:
+  ws_url: "wss://openspeech.bytedance.com/api/v3/tts/bidirection"
+  cluster: "volcano_tts"
+  resource_id: "seed-tts-2.0"
+  speaker: "zh_female_jiaochuannv_uranus_bigtts"
+  audio_params:
+    speech_rate: 0
+    loudness_rate: 0
+  additions:
+    post_process:
+      pitch: 0
+  pcm_queue_limit: 200
+  first_pcm_timeout: 3.0
+
+audio:
+  sample_rate: 16000
+  channels: 1
+  sample_width: 2
+  frame_duration_ms: 20
+  rms_threshold: 0.015
+  rms_consecutive_frames: 3
+  prebuffer_ms: 500
+  vad_silence_ms: 1600
+  turn_end_silence_ms: 1800
+  max_turn_ms: 120000
+
+livetalking:
+  http_url: "http://127.0.0.1:8110"
+  avatar_id: "suwanyun_mvp_v3"
+  audio_stream_path: "/audio-stream"
+  interrupt_path: "/interrupt_talk"
+  offer_path: "/offer"
+  session_close_path: "/api/admin/sessions/close"
+  webrtc_ice_host: "127.0.0.1"
+  webrtc_ice_udp_port: 58200
+
+storage:
+  db_path: "data/conversations.db"
+  max_history_turns: 20
+
+logging:
+  level: "INFO"
+  directory: "data/logs"
+  max_bytes: 10485760
+  backup_count: 5

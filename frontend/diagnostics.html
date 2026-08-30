@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>诊断 - AI-Wanyun</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <style>
+    body { padding: 24px; overflow: auto; }
+    h1 { font-size: 20px; margin-bottom: 16px; }
+    pre {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .refresh { margin-bottom: 16px; padding: 8px 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>诊断信息</h1>
+  <button class="refresh" onclick="load()">刷新</button>
+  <pre id="output">加载中…</pre>
+  <script>
+    async function load() {
+      try {
+        const r = await fetch('/api/diagnostics');
+        const data = await r.json();
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('output').textContent = '获取诊断信息失败：' + e;
+      }
+    }
+    load();
+    setInterval(load, 5000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-labelledby="title desc">
+  <title id="title">AI-Wanyun public runtime architecture</title>
+  <desc id="desc">Text flows directly to the Conversation Core. Microphone input flows through VAD and ASR to the Conversation Core. The Conversation Core uses the LLM, public Persona, and Memory, then sends text to TTS, an external LiveTalking or Wav2Lip runtime, WebRTC, and Su Wanyun.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#10151f"/><stop offset="1" stop-color="#1c2935"/></linearGradient>
+    <linearGradient id="accent" x1="0" x2="1"><stop offset="0" stop-color="#78d4c5"/><stop offset="1" stop-color="#e8bb78"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".24"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9bc9c2"/></marker>
+    <style>
+      .title { font: 600 24px 'Segoe UI', 'Noto Sans SC', sans-serif; fill: #f4f7f6; }
+      .label { font: 600 17px 'Segoe UI', 'Noto Sans SC', sans-serif; fill: #f4f7f6; }
+      .sub { font: 400 13px 'Segoe UI', 'Noto Sans SC', sans-serif; fill: #b9c9cb; }
+      .note { font: 500 15px 'Segoe UI', 'Noto Sans SC', sans-serif; fill: #d9e7e4; }
+      .box { fill: #1b2730; stroke: #5c7c7e; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="1280" height="520" rx="24" fill="url(#bg)"/>
+  <text x="48" y="54" class="title">AI-Wanyun · Public runtime path</text>
+  <text x="48" y="83" class="sub">One live turn, from text or microphone input to Su Wanyun over WebRTC</text>
+
+  <g filter="url(#shadow)">
+    <rect class="box" x="44" y="150" width="150" height="76" rx="14"/><rect class="box" x="44" y="286" width="150" height="76" rx="14"/>
+    <rect class="box" x="250" y="244" width="154" height="124" rx="14"/><rect class="box" x="458" y="154" width="172" height="132" rx="14"/>
+    <rect class="box" x="684" y="154" width="164" height="132" rx="14"/><rect class="box" x="902" y="154" width="156" height="132" rx="14"/>
+    <rect class="box" x="1090" y="154" width="86" height="132" rx="14"/><rect x="1200" y="134" width="64" height="172" rx="16" fill="#243b3f" stroke="url(#accent)" stroke-width="2"/>
+  </g>
+
+  <g fill="none" stroke="#9bc9c2" stroke-width="2.5" marker-end="url(#arrow)">
+    <path d="M194 188 H458"/><path d="M194 324 H250"/>
+    <path d="M404 306 H430 Q458 306 458 280 V220"/><path d="M630 220 H684"/><path d="M848 220 H902"/><path d="M1058 220 H1090"/><path d="M1176 220 H1200"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text x="119" y="179" class="label">Text</text><text x="119" y="204" class="sub">typed input</text>
+    <text x="119" y="315" class="label">Mic</text><text x="119" y="340" class="sub">microphone input</text>
+    <text x="327" y="272" class="label">VAD / ASR</text><text x="327" y="299" class="sub">voice activity</text><text x="327" y="322" class="sub">speech to text</text><text x="327" y="345" class="sub">语音识别</text>
+    <text x="544" y="184" class="label">Conversation Core</text><text x="544" y="216" class="sub">turn orchestration</text><text x="544" y="239" class="sub">文本与语音会话</text><text x="544" y="265" class="sub">one public runtime</text>
+    <text x="766" y="184" class="label">LLM + Persona</text><text x="766" y="212" class="label">+ Memory</text><text x="766" y="244" class="sub">context and response</text><text x="766" y="268" class="sub">公开人设与记忆</text>
+    <text x="980" y="184" class="label">TTS</text><text x="980" y="216" class="sub">text to speech</text><text x="980" y="242" class="sub">语音合成</text><text x="980" y="268" class="sub">audio output</text>
+    <text x="1133" y="184" class="label">External</text><text x="1133" y="211" class="label">LiveTalking</text><text x="1133" y="237" class="label">/ Wav2Lip</text><text x="1133" y="268" class="sub">lip-sync runtime</text>
+    <text x="1232" y="194" class="label">Web</text><text x="1232" y="220" class="label">RTC</text><text x="1232" y="258" class="sub">Su</text><text x="1232" y="279" class="sub">Wanyun</text>
+  </g>
+
+  <rect x="44" y="414" width="1196" height="66" rx="14" fill="#142029" stroke="#3f6365"/><circle cx="72" cy="447" r="8" fill="url(#accent)"/>
+  <text x="94" y="442" class="note">BYOK Providers: choose and supply your own ASR / LLM / TTS access.</text>
+  <text x="94" y="465" class="sub">LiveTalking / Wav2Lip stays outside this repository as an external runtime boundary.</text>
+</svg>

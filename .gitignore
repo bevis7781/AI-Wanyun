@@ -1,0 +1,41 @@
+# Runtime secrets and config
+config.yaml
+secrets.json
+
+# Generated data
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/**/*.db
+data/**/*.db-wal
+data/**/*.db-shm
+data/**/*.sqlite*
+data/test_tmp/
+data/logs/
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary reference (copied from old container)
+_ref_*.py
+
+# Local harness scratch and ad-hoc historical captures
+.codex-tools-*/
+/browser-after-close.png.jpg
+
+# Backup directories
+.backup_*/
+
+# Historical acceptance evidence (kept on disk, outside the new baseline)
+verification/
