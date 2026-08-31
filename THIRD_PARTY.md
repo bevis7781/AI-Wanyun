@@ -1,8 +1,8 @@
 # Third-party and installation boundary
 
-> This is a boundary record. The root `LICENSE` is MIT and covers only
-> AI-Wanyun original source code; third-party and user-provided components
-> remain independent.
+> This is a boundary record. The root `LICENSE` is MIT for AI-Wanyun original
+> content except where separately stated; third-party and user-provided
+> components remain independent.
 
 ## What this candidate contains
 
@@ -13,7 +13,8 @@ model/checkpoint files, face-detector weights, `.trae` content, private runtime
 files, or container images. Python packages are installed by the user from the
 pinned requirement files; they are not vendored here.
 
-AI-Wanyun original source in this candidate is covered by the root MIT License.
+AI-Wanyun original content in this candidate is covered by the root MIT License
+except where separately stated.
 The root MIT License does not cover the official Character Pack. Its approved
 Public Persona and distributed Avatar video are licensed under CC BY 4.0 only
 to the extent of rights held by project contributors, with attribution
@@ -64,7 +65,8 @@ is BSD-3-Clause.
 No external component is marked `resolved` merely because it is installed
 separately. Before any release, reconcile the lock to a deliberate target
 environment and complete the per-artifact and provider-terms reviews. The root
-MIT License covers only AI-Wanyun original source code; it does not clear the
+MIT License covers AI-Wanyun original content except the separately licensed
+Character Pack; it does not clear the
 external runtime, model, dataset, detector, generation platform, other media,
 or provider rights. The Character Pack's narrow CC BY 4.0 grant does not widen
 that boundary. LiveTalking's Apache-2.0 license remains an upstream fact only

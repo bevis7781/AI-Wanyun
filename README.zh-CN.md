@@ -38,8 +38,8 @@ speaking/唇形同步 → paused；不含音频流、音乐或特效。
 
 ## 仓库包含什么
 
-- `backend/`：FastAPI、对话状态机、SQLite 存储、长期记忆，以及真实的
-  ASR/LLM/TTS/LiveTalking 适配器。
+- `backend/`：FastAPI、对话状态机、SQLite 存储、deterministic 长期记忆（仅记录
+  用户明确事实与共同经历），以及真实的 ASR/LLM/TTS/LiveTalking 适配器。
 - `frontend/`：原生 HTML/CSS/JavaScript、麦克风采集、AudioWorklet、
   WebSocket 控制、WebRTC Avatar 播放、字幕和文字输入。
 - `characters/su-wanyun/`：官方 Public Persona、AI 生成 Avatar、生成来源记录
@@ -54,7 +54,7 @@ speaking/唇形同步 → paused；不含音频流、音乐或特效。
 仓库中的苏挽云视频只是创意输入素材，不代表外部唇形同步运行栈被纳入本仓库，
 也不代表整个运行栈已获得商业使用授权。
 
-Wav2Lip 上游项目说明了非商业/研究用途限制。AI-Wanyun 自有源码采用 MIT，
+Wav2Lip 上游项目说明了非商业/研究用途限制。AI-Wanyun 原创内容采用 MIT，
 不能据此外推整个运行栈可商业使用。详见 `THIRD_PARTY.md`、
 `DEPENDENCY_LICENSES.md` 与 `NOTICE`。
 
@@ -125,8 +125,8 @@ Provider 凭据或 LiveTalking 时，仍可运行离线测试和 `/health`，但
 
 ## 许可证
 
-- `backend/`、`frontend/`、`tests/` 中 AI-Wanyun original source code：根目录
-  MIT License，`Copyright (c) 2026 AI-Wanyun contributors`。
+- 除下列另行声明外，AI-Wanyun 原创内容适用根目录 MIT License，版权声明为
+  `Copyright (c) 2026 AI-Wanyun contributors`。
 - 苏挽云官方 Persona 与随仓 Avatar：CC BY 4.0，仅在项目贡献者实际持有的
   权利范围内授权；署名为 `AI-Wanyun / Su Wanyun Character Pack`。
 - 第三方软件、模型、外部运行时、Provider 服务与用户内容：分别适用其自身

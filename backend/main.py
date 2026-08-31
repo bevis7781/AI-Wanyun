@@ -161,7 +161,8 @@ async def close_session() -> JSONResponse:
         await sess.stop_current_streams()
         return JSONResponse({"ok": True})
     except Exception as exc:
-        return JSONResponse({"ok": False, "error": str(exc)}, status_code=500)
+        logger.error(f"session close error={redact_exc(exc)}")
+        return JSONResponse({"ok": False, "error": "internal_error"}, status_code=500)
 
 
 @app.get("/diagnostics")

@@ -1,8 +1,7 @@
-"""安全相关回归测试：配置导入、日志脱敏、数据文件隔离。"""
+"""安全相关回归测试：日志脱敏、会话关闭错误隔离、数据文件隔离。"""
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 import sys
@@ -11,143 +10,29 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-import yaml
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from backend import config as config_module
+from backend import main as main_module
 from backend.config import Config
 from backend.logger import SecretRedactFilter, redact, redact_exc
 
 
-@unittest.skip("legacy private-config importer is intentionally excluded from the public candidate")
-class TestImportConfig(unittest.TestCase):
-    def setUp(self):
-        self.tmp_dir = tempfile.TemporaryDirectory()
-        self.tmp = Path(self.tmp_dir.name)
-        self.source = self.tmp / "source" / ".config.yaml"
-        self.source.parent.mkdir(parents=True, exist_ok=True)
-        self.secrets = self.tmp / "secrets.json"
-        self.config = self.tmp / "config.yaml"
+class TestSessionClose(unittest.IsolatedAsyncioTestCase):
+    async def test_internal_error_is_redacted_and_not_returned(self):
+        raw_secret = "SYNTHETIC_CLOSE_SECRET_12345"
 
-    def tearDown(self):
-        self.tmp_dir.cleanup()
+        async def failing_get_session():
+            raise RuntimeError(f"downstream auth failed: {raw_secret}")
 
-    def _write_source(self, data: dict) -> None:
-        with self.source.open("w", encoding="utf-8") as f:
-            yaml.safe_dump(data, f, allow_unicode=True)
+        with patch.dict(os.environ, {"DEEPSEEK_API_KEY": raw_secret}), \
+                patch.object(main_module, "get_session", failing_get_session), \
+                self.assertLogs(main_module.logger, level="ERROR") as captured:
+            response = await main_module.close_session()
 
-    def _run_import(self) -> int:
-        """在临时目录上执行导入脚本，返回退出码。"""
-        import scripts.import_config as importer
-
-        # 导入脚本需要本地 config.yaml 存在以便合并
-        if not self.config.exists():
-            self.config.write_text("app:\n", encoding="utf-8")
-
-        original_source = importer.SOURCE_PATH
-        original_secrets = importer.SECRETS_PATH
-        original_config = importer.CONFIG_PATH
-        try:
-            importer.SOURCE_PATH = self.source
-            importer.SECRETS_PATH = self.secrets
-            importer.CONFIG_PATH = self.config
-            return importer.main()
-        finally:
-            importer.SOURCE_PATH = original_source
-            importer.SECRETS_PATH = original_secrets
-            importer.CONFIG_PATH = original_config
-
-    def test_extracts_all_secrets_and_tts_params(self):
-        self._write_source(
-            {
-                "ASR": {"QwenAudio3ASRStream": {"api_key": "fake-dashscope"}},
-                "LLM": {"DeepSeekLLM": {"api_key": "fake-deepseek"}},
-                "TTS": {
-                    "HuoshanDoubleStreamTTSV2": {
-                        "appid": "fake-appid",
-                        "access_token": "fake-token",
-                        "ws_url": "wss://example.com/tts",
-                        "resource_id": "seed-tts-2.0",
-                        "speaker": "test-speaker",
-                        "audio_params": {"sample_rate": 16000, "speech_rate": 0},
-                        "additions": {"post_process": {"pitch": 0}},
-                    }
-                },
-            }
-        )
-        rc = self._run_import()
-        self.assertEqual(rc, 0)
-
-        secrets = json.loads(self.secrets.read_text(encoding="utf-8"))
-        self.assertEqual(secrets["DASHSCOPE_API_KEY"], "fake-dashscope")
-        self.assertEqual(secrets["DEEPSEEK_API_KEY"], "fake-deepseek")
-        self.assertEqual(secrets["HUOSHAN_APPID"], "fake-appid")
-        self.assertEqual(secrets["HUOSHAN_ACCESS_TOKEN"], "fake-token")
-
-        cfg = yaml.safe_load(self.config.read_text(encoding="utf-8"))
-        self.assertEqual(cfg["tts"]["ws_url"], "wss://example.com/tts")
-        self.assertEqual(cfg["tts"]["resource_id"], "seed-tts-2.0")
-        self.assertEqual(cfg["tts"]["speaker"], "test-speaker")
-
-    def test_dashscope_fallback_to_memory_key(self):
-        self._write_source(
-            {
-                "ASR": {"QwenAudio3ASRStream": {"api_key": ""}},
-                "Memory": {"powermem": {"embedder": {"config": {"api_key": "memory-key"}}}},
-                "LLM": {"DeepSeekLLM": {"api_key": "llm-key"}},
-                "TTS": {
-                    "HuoshanDoubleStreamTTSV2": {
-                        "appid": "app",
-                        "access_token": "token",
-                    }
-                },
-            }
-        )
-        rc = self._run_import()
-        self.assertEqual(rc, 0)
-        secrets = json.loads(self.secrets.read_text(encoding="utf-8"))
-        self.assertEqual(secrets["DASHSCOPE_API_KEY"], "memory-key")
-
-    def test_existing_secret_not_overwritten_by_empty(self):
-        self.secrets.write_text(
-            json.dumps(
-                {
-                    "DASHSCOPE_API_KEY": "old-dashscope",
-                    "DEEPSEEK_API_KEY": "old-deepseek",
-                    "HUOSHAN_APPID": "old-appid",
-                    "HUOSHAN_ACCESS_TOKEN": "old-token",
-                },
-                ensure_ascii=False,
-            ),
-            encoding="utf-8",
-        )
-        self._write_source(
-            {
-                "ASR": {"QwenAudio3ASRStream": {"api_key": ""}},
-                "LLM": {"DeepSeekLLM": {"api_key": ""}},
-                "TTS": {
-                    "HuoshanDoubleStreamTTSV2": {
-                        "appid": "",
-                        "access_token": "",
-                    }
-                },
-            }
-        )
-        rc = self._run_import()
-        # 旧密钥全部被保留，因此不应返回缺失
-        self.assertEqual(rc, 0)
-        secrets = json.loads(self.secrets.read_text(encoding="utf-8"))
-        # 已有非空本地密钥不得被空值覆盖
-        self.assertEqual(secrets["DASHSCOPE_API_KEY"], "old-dashscope")
-        self.assertEqual(secrets["DEEPSEEK_API_KEY"], "old-deepseek")
-        self.assertEqual(secrets["HUOSHAN_APPID"], "old-appid")
-        self.assertEqual(secrets["HUOSHAN_ACCESS_TOKEN"], "old-token")
-
-    def test_missing_source_error(self):
-        self.source.unlink(missing_ok=True)
-        rc = self._run_import()
-        self.assertEqual(rc, 1)
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.body, b'{"ok":false,"error":"internal_error"}')
+        self.assertNotIn(raw_secret, "\n".join(captured.output))
 
 
 class TestLogRedaction(unittest.TestCase):

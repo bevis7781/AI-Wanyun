@@ -43,7 +43,8 @@ The official Su Wanyun character contains mature relationship themes between fic
 ## What is included
 
 - `backend/`: FastAPI endpoints, conversation state machine, SQLite storage,
-  long-term memory, and real ASR/LLM/TTS/LiveTalking adapters.
+  deterministic long-term memory of explicit user facts and shared experiences,
+  and real ASR/LLM/TTS/LiveTalking adapters.
 - `frontend/`: native HTML/CSS/JavaScript, microphone capture, AudioWorklet,
   WebSocket control, WebRTC Avatar playback, captions, and text input.
 - `characters/su-wanyun/`: the official Public Persona, AI-generated Avatar
@@ -140,8 +141,8 @@ Tests are designed to use synthetic fixtures and temporary runtime data.
 
 ## Licenses
 
-- AI-Wanyun original source code in `backend/`, `frontend/`, and `tests/`:
-  root MIT License, `Copyright (c) 2026 AI-Wanyun contributors`.
+- AI-Wanyun original content, except where separately stated below: root MIT
+  License, `Copyright (c) 2026 AI-Wanyun contributors`.
 - Official Su Wanyun Persona and distributed Avatar asset: CC BY 4.0, to the
   extent of rights held by project contributors; required attribution:
   `AI-Wanyun / Su Wanyun Character Pack`.

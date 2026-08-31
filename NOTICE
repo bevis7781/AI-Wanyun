@@ -1,7 +1,7 @@
 AI-Wanyun Project Notice
 
-The root LICENSE is the MIT License and applies only to AI-Wanyun original
-source code. It does not grant rights in third-party software, models,
+The root LICENSE is the MIT License and applies to AI-Wanyun original content
+except where separately stated below. It does not grant rights in third-party software, models,
 checkpoints, face detectors, datasets, generation platforms, provider
 services, or user-supplied content. Those components remain subject to their
 own licenses, terms, permissions, and restrictions.
@@ -9,8 +9,7 @@ own licenses, terms, permissions, and restrictions.
 Project content
 ---------------
 
-The original source in backend/, frontend/, and tests/ is covered by the root
-MIT License. The official files
+AI-Wanyun original content is covered by the root MIT License. The official files
 `characters/su-wanyun/persona.md` and
 `characters/su-wanyun/avatar/suwanyun_idle_speaking_v3_25fps.mp4` are covered
 separately by CC BY 4.0, only to the extent of rights held by project

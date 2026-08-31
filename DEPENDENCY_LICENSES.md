@@ -1,8 +1,8 @@
 # Dependency and publication boundary matrix
 
 > Audit status: evidence-backed dependency and publication boundary for the
-> public candidate. The root `LICENSE` is MIT only for AI-Wanyun original source
-> code; third-party package licenses and
+> public candidate. The root `LICENSE` is MIT for AI-Wanyun original content
+> except where separately stated; third-party package licenses and
 > external runtime/content terms remain separate.
 
 ## Evidence method and conclusions
@@ -26,13 +26,13 @@
 
 | component/package | current version/source | included vs runtime external | upstream | license | license evidence | redistribution status | attribution/NOTICE requirement | commercial concern | action |
 |---|---|---|---|---|---|---|---|---|---|
-| `backend/` | Candidate source; version is candidate revision | Included source | N/A; no upstream URL in files | MIT | Project licensing decision; root `LICENSE` | Covered by root MIT as AI-Wanyun original source | Preserve root MIT notice; retain third-party attributions if later identified | MIT applies to this source only; external runtime and service rights remain separate | Keep within root MIT scope; review any future copied code |
-| `frontend/` | Candidate HTML/CSS/JS/AudioWorklet; candidate revision | Included source | N/A; no upstream URL in files | MIT | Project licensing decision; root `LICENSE` | Covered by root MIT as AI-Wanyun original source | Preserve root MIT notice; document any future vendored assets | MIT applies to this source only; media and runtime rights remain separate | Keep within root MIT scope; scan future assets |
-| `tests/` | Candidate regression tests; candidate revision | Included source | N/A; references protocols but no copied upstream file identified | MIT | Project licensing decision; root `LICENSE` | Covered by root MIT as AI-Wanyun original source | Preserve root MIT notice; protocol/provider names are not license grants | MIT applies to these tests only; provider terms remain separate | Keep within root MIT scope; review future copied fixtures |
-| `README.md`, `ARCHITECTURE.md` | Candidate documentation | Included documentation | External names/URLs are references only | Outside this Gate's original-source-code MIT scope; no additional license conclusion by this Gate | Boundary record; external references remain separate | No additional license conclusion by this Gate | Keep attribution links and non-endorsement language | Do not imply provider or runtime commercial rights | Keep boundary wording and third-party references |
-| `config.example.yaml`, `secrets.example.json`, `requirements*.txt` | Examples and dependency declarations | Included metadata/examples; packages runtime external | Package upstreams listed below | Outside this Gate's original-source-code MIT scope; package licenses are separate rows | Boundary record; package evidence below | Packages are not vendored; no additional license conclusion by this Gate for declarations/examples | Keep upstream links and dependency notices in release materials as applicable | Provider terms and package obligations remain separate | Maintain dependency matrix and lock provenance |
-| `data/persona.example.md` | Synthetic example; candidate revision | Included example content | N/A; no person/media identified | Outside this Gate's original-source-code MIT scope; no additional license conclusion by this Gate | Boundary record; synthetic content inventory | No additional license conclusion by this Gate; user Personas remain independent | Preserve boundary notice; do not imply rights to user-supplied personas | Avoid identity, likeness, publicity, or commercial claims | Keep user-supplied assets separate |
-| `.gitignore` and repository metadata | Candidate housekeeping | Included metadata | N/A | Outside this Gate's original-source-code MIT scope; no additional license conclusion by this Gate | Boundary record | No additional license conclusion by this Gate for metadata | No special notice identified | No independent clearance for external content | Keep external content outside the candidate |
+| `backend/` | Candidate source; version is candidate revision | Included original source | N/A; no upstream URL in files | MIT | Project licensing decision; root `LICENSE` | Covered by root MIT as AI-Wanyun original content | Preserve root MIT notice; retain third-party attributions if later identified | MIT applies to this source only; external runtime and service rights remain separate | Keep within root MIT scope; review any future copied code |
+| `frontend/` | Candidate HTML/CSS/JS/AudioWorklet; candidate revision | Included original source | N/A; no upstream URL in files | MIT | Project licensing decision; root `LICENSE` | Covered by root MIT as AI-Wanyun original content | Preserve root MIT notice; document any future vendored assets | MIT applies to this source only; media and runtime rights remain separate | Keep within root MIT scope; scan future assets |
+| `tests/` | Candidate regression tests; candidate revision | Included original source | N/A; references protocols but no copied upstream file identified | MIT | Project licensing decision; root `LICENSE` | Covered by root MIT as AI-Wanyun original content | Preserve root MIT notice; protocol/provider names are not license grants | MIT applies to these tests only; provider terms remain separate | Keep within root MIT scope; review future copied fixtures |
+| `README.md`, `ARCHITECTURE.md` | Candidate documentation | Included original documentation | External names/URLs are references only | Root MIT for AI-Wanyun original content; referenced external rights remain separate | Boundary record; external references remain separate | Keep attribution links and non-endorsement language | Do not imply provider or runtime commercial rights | Keep boundary wording and third-party references |
+| `config.example.yaml`, `secrets.example.json`, `requirements*.txt` | Examples and dependency declarations | Included original metadata/examples; packages runtime external | Package upstreams listed below | Root MIT for original portions; package licenses are separate rows | Boundary record; package evidence below | Packages are not vendored; package obligations remain separate | Keep upstream links and dependency notices in release materials as applicable | Provider terms and package obligations remain separate | Maintain dependency matrix and lock provenance |
+| `data/persona.example.md` | Synthetic example; candidate revision | Included original example content | N/A; no person/media identified | Root MIT for this original example; user-supplied Personas remain independent | Boundary record; synthetic content inventory | Preserve boundary notice; do not imply rights to user-supplied personas | Avoid identity, likeness, publicity, or commercial claims | Keep user-supplied assets separate |
+| `.gitignore` and repository metadata | Candidate housekeeping | Included original metadata | N/A | Root MIT for original housekeeping content; external content remains separate | Boundary record | No special notice identified | No independent clearance for external content | Keep external content outside the candidate |
 | `.trae`, private runtime, private/historical Avatar media, checkpoints, Docker images | Confirmed absent from candidate inventory | Not included; external/private boundary | N/A | UNKNOWN / not reviewed | Absence is an inventory fact, not a license conclusion | Not redistributed by candidate; the separately reviewed official Character Pack is a distinct included boundary | If later bundled, obtain per-asset notices and licenses first | High risk if bundled without provenance | Keep excluded; reopen review before bundling |
 
 ## Direct dependencies (`requirements.txt`)
@@ -117,7 +117,8 @@ base/test dependency edges represented by the selected install.
 
 ## Root MIT scope (not a third-party authorization)
 
-The root MIT License covers only AI-Wanyun original source code. It does not extend to
+The root MIT License covers AI-Wanyun original content except the separately licensed
+Character Pack. It does not extend to
 LiveTalking's whole runtime, Wav2Lip, checkpoints, face detectors, datasets,
 provider APIs, Avatar/media, or user content. Each external component retains
 its own license, terms, attribution, and usage restrictions; the Apache-2.0
@@ -125,7 +126,7 @@ entry for LiveTalking records only its upstream repository license.
 
 ## Gate result
 
-Current result: **ROOT SOURCE LICENSED UNDER MIT; EXTERNAL RIGHTS NOT CLEARED**.
+Current result: **ROOT ORIGINAL CONTENT LICENSED UNDER MIT; EXTERNAL RIGHTS NOT CLEARED**.
 The Windows CPython 3.12 lock has passed a clean installation and `pip check`.
 Regenerate and re-audit it for another platform or interpreter generation.
 Separate rights review remains required for every external runtime, model,
