@@ -2,8 +2,6 @@
 
 **A local real-time AI companion with a real-human avatar, voice, long-term memory, and lip sync.**
 
-![Su Wanyun in the AI-Wanyun public runtime](docs/assets/readme/hero.png)
-
 Meet **Su Wanyun**, the official character included with AI-Wanyun. Talk by text or voice, keep persistent memories across conversations, and receive real-time captioned, lip-synced Avatar responses through WebRTC.
 
 * 🎙️ Voice conversation
