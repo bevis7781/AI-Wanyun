@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-**一个本地实时 AI 伴侣：真人风格 Avatar、语音、长期记忆和实时唇形同步。**
+一个本地实时 Windows AI 伴侣：真人风格 Avatar、语音、长期记忆和实时唇形同步。
 
 ![AI-Wanyun 公共运行时中的苏挽云](docs/assets/readme/hero.png)
 
