@@ -9,7 +9,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -17,6 +17,37 @@ from backend import config as config_module
 from backend import main as main_module
 from backend.config import Config
 from backend.logger import SecretRedactFilter, redact, redact_exc
+
+
+class _FakeWebSocket:
+    def __init__(self, origin, messages):
+        self.headers = {"origin": origin} if origin is not None else {}
+        self._messages = list(messages)
+        self.accepted = False
+        self.closed_code = None
+        self.sent = []
+
+    async def accept(self):
+        self.accepted = True
+
+    async def close(self, code=None):
+        self.closed_code = code
+
+    async def send_json(self, message):
+        self.sent.append(message)
+
+    async def receive(self):
+        if self._messages:
+            return self._messages.pop(0)
+        raise main_module.WebSocketDisconnect()
+
+
+class _FakeWebSocketSession:
+    state = "listening"
+
+    def __init__(self):
+        self.handle_pcm = AsyncMock()
+        self.stop_current_streams = AsyncMock()
 
 
 class TestSessionClose(unittest.IsolatedAsyncioTestCase):
@@ -51,6 +82,51 @@ class TestSessionClose(unittest.IsolatedAsyncioTestCase):
         payload = json.loads(response.body)
         self.assertNotEqual(payload["session_id"], full_id)
         self.assertIn("***", payload["session_id"])
+
+
+class TestWebSocketSecurity(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        main_module._active_websockets.clear()
+        self.session = _FakeWebSocketSession()
+
+    async def asyncTearDown(self):
+        main_module._active_websockets.clear()
+
+    async def test_loopback_origin_accepts_and_handles_valid_pcm(self):
+        ws = _FakeWebSocket("http://localhost:7870", [{"type": "websocket.receive", "bytes": bytes(640)}])
+
+        async def fake_get_session():
+            return self.session
+
+        with patch.object(main_module, "get_session", fake_get_session):
+            await main_module.websocket_endpoint(ws)
+
+        self.assertTrue(ws.accepted)
+        self.assertIsNone(ws.closed_code)
+        self.session.handle_pcm.assert_awaited_once_with(bytes(640))
+
+    async def test_non_loopback_origin_rejected_before_accept_or_session(self):
+        ws = _FakeWebSocket("http://192.168.1.5:7870", [])
+        get_session = AsyncMock(side_effect=AssertionError("session must not be created"))
+
+        with patch.object(main_module, "get_session", get_session):
+            await main_module.websocket_endpoint(ws)
+
+        self.assertFalse(ws.accepted)
+        self.assertEqual(ws.closed_code, 1008)
+        get_session.assert_not_awaited()
+
+    async def test_invalid_pcm_frame_is_dropped_before_session(self):
+        ws = _FakeWebSocket("https://127.0.0.1:7870", [{"type": "websocket.receive", "bytes": bytes(638)}])
+
+        async def fake_get_session():
+            return self.session
+
+        with patch.object(main_module, "get_session", fake_get_session):
+            await main_module.websocket_endpoint(ws)
+
+        self.assertTrue(ws.accepted)
+        self.session.handle_pcm.assert_not_awaited()
 
 
 class TestLogRedaction(unittest.TestCase):
