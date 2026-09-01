@@ -17,7 +17,7 @@ from backend.adapters.livetalking import DummyLiveTalkingAdapter
 from backend.adapters.qwen_asr import DummyASRAdapter
 from backend.session import ConversationSession
 
-from test_core import _make_config
+from tests.test_core import _make_config
 
 
 def _voice_frame() -> bytes:

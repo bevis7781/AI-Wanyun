@@ -11,6 +11,9 @@ Key）；开发者也可以替换为自己有权使用的 Persona、Avatar 与 P
 > Developer-oriented Public Preview：这里保留的是真实实现，不是接口空壳；
 > 但它尚不是能在陌生 GPU 机器上一条命令安装完成的发行包。
 
+> **安全边界：** Core 不提供远程访问鉴权，仅支持 localhost 本机使用。不要将其暴露到
+> 局域网、互联网或公开的反向代理之后。
+
 ## 先看真实运行时
 
 ![AI-Wanyun 公共运行时中的苏挽云](docs/assets/readme/hero.png)

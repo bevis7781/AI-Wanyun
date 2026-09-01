@@ -13,7 +13,8 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.config import PROJECT_ROOT, get_config
-from backend.logger import get_logger, redact_exc, setup_logging
+from backend.logger import get_logger, mask_id, redact_exc, setup_logging
+from backend.adapters.livetalking import PCM_FRAME_BYTES
 from backend.session import ConversationSession
 
 SERVICE_NAME = "ai-wanyun"
@@ -176,7 +177,39 @@ async def diagnostics_page() -> HTMLResponse:
 @app.get("/api/diagnostics")
 async def diagnostics_data() -> JSONResponse:
     sess = await get_session()
-    return JSONResponse(sess.diagnostics())
+    diagnostics = dict(sess.diagnostics())
+    session_id = diagnostics.get("session_id")
+    if isinstance(session_id, str):
+        diagnostics["session_id"] = mask_id(session_id)
+    return JSONResponse(diagnostics)
+
+
+def _is_allowed_browser_origin(origin: str | None) -> bool:
+    """Allow only loopback browser origins; keep non-browser clients compatible."""
+    if origin is None:
+        return True
+    try:
+        parsed = urllib.parse.urlparse(origin)
+        hostname = (parsed.hostname or "").lower()
+        port = parsed.port
+    except (TypeError, ValueError):
+        return False
+    return (
+        parsed.scheme in {"http", "https"}
+        and hostname in {"localhost", "127.0.0.1"}
+        and parsed.username is None
+        and parsed.password is None
+        and not parsed.path
+        and not parsed.params
+        and not parsed.query
+        and not parsed.fragment
+        and (port is None or 1 <= port <= 65535)
+    )
+
+
+def _is_valid_pcm_frame(pcm: object) -> bool:
+    """The browser contract is one 20 ms, mono, signed-16 PCM frame (640 bytes)."""
+    return isinstance(pcm, bytes) and len(pcm) == PCM_FRAME_BYTES
 
 
 def _valid_lt_url(value: str) -> bool:
@@ -225,6 +258,11 @@ async def runtime_config() -> JSONResponse:
 
 @app.websocket("/ws")
 async def websocket_endpoint(ws: WebSocket) -> None:
+    origin = ws.headers.get("origin")
+    if not _is_allowed_browser_origin(origin):
+        logger.warning("WebSocket rejected non-loopback Origin")
+        await ws.close(code=1008)
+        return
     await ws.accept()
     _active_websockets.add(ws)
     sess = await get_session()
@@ -251,7 +289,14 @@ async def websocket_endpoint(ws: WebSocket) -> None:
                 logger.info("WebSocket disconnected")
                 break
             if "bytes" in message:
-                await sess.handle_pcm(message["bytes"])
+                pcm = message["bytes"]
+                if not _is_valid_pcm_frame(pcm):
+                    logger.warning(
+                        "WebSocket dropped invalid PCM frame size=%s",
+                        len(pcm) if isinstance(pcm, (bytes, bytearray, memoryview)) else "non-bytes",
+                    )
+                    continue
+                await sess.handle_pcm(pcm)
             elif "text" in message:
                 try:
                     data = json.loads(message["text"])

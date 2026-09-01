@@ -13,6 +13,9 @@ keys (BYOK), or replace the Persona, Avatar, and Providers with your own.
 > stub, but it is not yet a one-command distribution for an unfamiliar GPU
 > machine.
 
+> **Security boundary:** Core has no remote-access authentication and supports
+> localhost use only. Do not expose it to a LAN, the Internet, or a public reverse proxy.
+
 [中文说明](README.zh-CN.md)
 
 ## See the public runtime

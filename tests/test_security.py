@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import sys
@@ -33,6 +34,23 @@ class TestSessionClose(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.body, b'{"ok":false,"error":"internal_error"}')
         self.assertNotIn(raw_secret, "\n".join(captured.output))
+
+    async def test_diagnostics_masks_livetalking_session_id(self):
+        full_id = "live-session-secret-123456"
+
+        class FakeSession:
+            def diagnostics(self):
+                return {"state": "listening", "session_id": full_id}
+
+        async def fake_get_session():
+            return FakeSession()
+
+        with patch.object(main_module, "get_session", fake_get_session):
+            response = await main_module.diagnostics_data()
+
+        payload = json.loads(response.body)
+        self.assertNotEqual(payload["session_id"], full_id)
+        self.assertIn("***", payload["session_id"])
 
 
 class TestLogRedaction(unittest.TestCase):
@@ -113,6 +131,34 @@ class TestLogRedaction(unittest.TestCase):
             )
             filt.filter(record)
             self.assertNotIn(fake_secret, record.msg)
+
+    def test_filter_preserves_numeric_args_and_formats_them(self):
+        fake_secret = "SYNTHETIC_NOT_A_SECRET_FORMAT_99"
+        with patch.dict(os.environ, {"DEEPSEEK_API_KEY": fake_secret}):
+            filt = SecretRedactFilter()
+            record = logging.LogRecord(
+                name="test",
+                level=logging.INFO,
+                pathname="",
+                lineno=0,
+                msg="count=%d secret=%s ratio=%.2f",
+                args=(7, fake_secret, 1.25),
+                exc_info=None,
+            )
+            filt.filter(record)
+        self.assertIsInstance(record.args[0], int)
+        self.assertIsInstance(record.args[2], float)
+        self.assertEqual(record.getMessage(), "count=7 secret=*** ratio=1.25")
+
+    def test_origin_and_pcm_contract_helpers(self):
+        self.assertTrue(main_module._is_allowed_browser_origin("http://localhost:7870"))
+        self.assertTrue(main_module._is_allowed_browser_origin("https://127.0.0.1"))
+        self.assertTrue(main_module._is_allowed_browser_origin(None))
+        self.assertFalse(main_module._is_allowed_browser_origin("http://192.168.1.5:7870"))
+        self.assertFalse(main_module._is_allowed_browser_origin("https://localhost.evil"))
+        self.assertTrue(main_module._is_valid_pcm_frame(bytes(640)))
+        self.assertFalse(main_module._is_valid_pcm_frame(bytes(638)))
+        self.assertFalse(main_module._is_valid_pcm_frame(bytes(642)))
 
 
 class TestStorageIsolation(unittest.TestCase):

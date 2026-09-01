@@ -53,9 +53,18 @@ class SecretRedactFilter(logging.Filter):
         return text
 
     def filter(self, record: logging.LogRecord) -> bool:
-        record.msg = self._redact_text(str(record.msg))
-        if record.args:
-            record.args = tuple(self._redact_text(str(arg)) for arg in record.args)
+        if isinstance(record.msg, str):
+            record.msg = self._redact_text(record.msg)
+        if isinstance(record.args, tuple):
+            record.args = tuple(
+                self._redact_text(arg) if isinstance(arg, str) else arg
+                for arg in record.args
+            )
+        elif isinstance(record.args, dict):
+            record.args = {
+                key: self._redact_text(value) if isinstance(value, str) else value
+                for key, value in record.args.items()
+            }
         return True
 
 
