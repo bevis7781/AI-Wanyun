@@ -1,22 +1,23 @@
 # AI-Wanyun
 
-AI-Wanyun is a Chinese-first, developer-oriented Public Preview for a local
-real-time AI companion: FastAPI conversation orchestration, voice Providers,
-persistent conversation and memory, and a real-person-style Avatar delivered
-through WebRTC with real-time lip-sync.
+**A local real-time AI companion with a real-human avatar, voice, long-term memory, and lip sync.**
 
-**Official character: Su Wanyun.** The repository includes her approved Public
-Persona and one AI-generated, speaking-safe Avatar asset. Bring your own API
-keys (BYOK), or replace the Persona, Avatar, and Providers with your own.
+![Su Wanyun in the AI-Wanyun public runtime](docs/assets/readme/hero.png)
 
-> Developer-oriented Public Preview: this is real implementation, not an API
-> stub, but it is not yet a one-command distribution for an unfamiliar GPU
-> machine.
+Meet **Su Wanyun**, the official character included with AI-Wanyun. Talk by text or voice, keep persistent memories across conversations, and receive real-time captioned, lip-synced Avatar responses through WebRTC.
 
-> **Security boundary:** Core has no remote-access authentication and supports
-> localhost use only. Do not expose it to a LAN, the Internet, or a public reverse proxy.
+* 🎙️ Voice conversation
+* 🧠 Persistent long-term memory
+* 👩 Real-person-style AI Avatar with real-time lip sync
+* 🔑 Bring your own LLM / ASR / TTS provider keys
+* 🏠 Local-first runtime
 
 [中文说明](README.zh-CN.md)
+
+> **Developer Preview:** AI-Wanyun is a real working implementation, but it is not yet a one-click desktop app for unfamiliar machines. The complete Avatar runtime currently requires a separately configured LiveTalking/Wav2Lip environment.
+
+> **Security:** Core currently supports localhost use only. Do not expose it directly to a LAN, the Internet, or a public reverse proxy.
+
 
 ## See the public runtime
 
