@@ -1,43 +1,29 @@
 # AI-Wanyun
 
-AI-Wanyun 是一个中文优先、面向开发者的 Public Preview：它在本地串联
-FastAPI 对话编排、语音 Provider、持久化对话与长期记忆，并通过 WebRTC 与实时
-唇形同步呈现真人风格 Avatar。
+[English README](README.md)
 
-**官方角色：苏挽云。** 仓库包含经批准的 Public Persona，以及唯一一份由 AI
-生成、适合 Idle/Speaking 场景的官方 Avatar 素材。项目采用 BYOK（自带 API
-Key）；开发者也可以替换为自己有权使用的 Persona、Avatar 与 Providers。
-
-> Developer-oriented Public Preview：这里保留的是真实实现，不是接口空壳；
-> 但它尚不是能在陌生 GPU 机器上一条命令安装完成的发行包。
-
-> **安全边界：** Core 不提供远程访问鉴权，仅支持 localhost 本机使用。不要将其暴露到
-> 局域网、互联网或公开的反向代理之后。
-
-## 先看真实运行时
+**一个本地实时 AI 伴侣：真人风格 Avatar、语音、长期记忆和实时唇形同步。**
 
 ![AI-Wanyun 公共运行时中的苏挽云](docs/assets/readme/hero.png)
 
-AI-Wanyun 是一个本地实时陪伴运行时：输入文字或使用麦克风，经由你自备
-API Key（BYOK）接入的 Providers 处理对话，再通过 WebRTC 获得带字幕、实时
-唇形同步的苏挽云角色。上图来自真实 Public runtime 页面；中央 Spirit Orb、
-字幕和角色画面都是产品本身的一部分。
+AI-Wanyun 默认附带官方角色 **苏挽云**。你可以通过文字或语音与她对话，在多次对话间保留持久记忆，并通过 WebRTC 运行时获得带字幕和实时唇形同步的 Avatar 回应。
 
-- **它是什么：** 面向开发者的 Public Preview，包含文字、麦克风、记忆和
-  实时 Avatar 播放的本地对话闭环。
-- **包含什么：** FastAPI Core、原生浏览器界面、Official Public Su Wanyun
-  Character Pack、Persona、Avatar 素材、本地存储和集成适配器。
-- **哪些在外部：** LiveTalking/Wav2Lip、GPU/模型文件和 Provider 账号仍是
-  独立的运行时与许可边界。
+* 🎙️ 文字与语音对话
+* 🧠 持久化长期记忆
+* 👩 真人风格 Avatar 与实时唇形同步
+* 🔑 自带 LLM / ASR / TTS Provider 凭据（BYOK）
+* 🏠 本地 Core 与 SQLite 对话存储
 
-[观看 12 秒无声真实录屏](docs/assets/readme/demo.mp4) ·
-[查看当前架构](docs/assets/readme/architecture.svg)
+> ⭐ 如果你觉得 AI-Wanyun 有点意思或对你有用，欢迎给仓库一个 Star——它能帮助更多人看到这个项目。
 
-录屏是真实浏览器页面捕获，完整展示文字输入 → thinking →
-speaking/唇形同步 → paused；不含音频流、音乐或特效。
+## 看它跑起来
 
-苏挽云官方角色包含虚构成年夫妻之间的成熟亲密关系主题，但仓库不包含色情或
-图像化露骨性内容。
+[观看 12 秒真实运行录屏（无声）](docs/assets/readme/demo.mp4) · [查看当前架构](docs/assets/readme/architecture.svg)
+
+录屏来自真实浏览器运行时，展示文字输入 → thinking → speaking / 实时唇形同步 → paused 的完整过程。
+
+> **当前状态：** 面向开发者的 Public Preview。完整 Avatar 运行时需要单独配置 LiveTalking/Wav2Lip。Core 仅支持 localhost，本身不提供远程访问鉴权；不要直接暴露到局域网、互联网或公开反向代理之后。
+
 
 ## 仓库包含什么
 
