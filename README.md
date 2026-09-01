@@ -2,7 +2,7 @@
 
 [中文说明](README.zh-CN.md)
 
-**A local real-time AI companion with a real-person-style avatar, voice, long-term memory, and lip sync.**
+**A local real-time Windows AI companion with a real-person-style avatar, voice, long-term memory, and lip sync.**
 
 ![Su Wanyun in the AI-Wanyun public runtime](docs/assets/readme/hero.png)
 
@@ -22,7 +22,7 @@ AI-Wanyun ships with **Su Wanyun** as its default character. Talk by text or voi
 
 The demo is a real browser capture showing text input → thinking → speaking with lip sync → paused.
 
-> **Current status:** Developer Preview. The complete Avatar runtime requires a separately configured LiveTalking/Wav2Lip environment. Core is localhost-only and does not provide remote-access authentication; do not expose it directly to a LAN, the Internet, or a public reverse proxy.
+> **Current status:** Developer-oriented Public Preview. The complete Avatar runtime requires a separately configured LiveTalking/Wav2Lip environment. Core is localhost-only and does not provide remote-access authentication; do not expose it directly to a LAN, the Internet, or a public reverse proxy.
 
 
 ## What is included
